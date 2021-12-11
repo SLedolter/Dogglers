@@ -16,9 +16,17 @@
 package com.example.dogglers.adapter
 
 import android.content.Context
+import android.view.LayoutInflater
+import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.dogglers.R
+import com.example.dogglers.const.Layout
+import com.example.dogglers.data.DataSource
+import com.example.dogglers.model.Dog
 
 /**
  * Adapter to inflate the appropriate list item layout and populate the view with information
@@ -27,27 +35,29 @@ import androidx.recyclerview.widget.RecyclerView
 class DogCardAdapter(
     private val context: Context?,
     private val layout: Int
-): RecyclerView.Adapter<DogCardAdapter.DogCardViewHolder>() {
+) : RecyclerView.Adapter<DogCardAdapter.DogCardViewHolder>() {
 
-    // TODO: Initialize the data using the List found in data/DataSource
+    private val dataset: List<Dog> = DataSource.dogs
 
     /**
      * Initialize view elements
      */
-    class DogCardViewHolder(view: View?): RecyclerView.ViewHolder(view!!) {
-        // TODO: Declare and initialize all of the list item UI components
+    class DogCardViewHolder(view: View?) : RecyclerView.ViewHolder(view!!) {
+        val imgProfile:ImageView = view!!.findViewById(R.id.img_profile)
+        val txtName: TextView = view!!.findViewById(R.id.txt_name)
+        val txtAge: TextView = view!!.findViewById(R.id.txt_age)
+        val txtHobbies: TextView = view!!.findViewById(R.id.txt_hobbies)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DogCardViewHolder {
-        // TODO: Use a conditional to determine the layout type and set it accordingly.
-        //  if the layout variable is Layout.GRID the grid list item should be used. Otherwise the
-        //  the vertical/horizontal list item should be used.
+        val chosenLayout:Int = if(layout == Layout.GRID){
+            R.layout.grid_list_item
+        } else {
+            R.layout.vertical_horizontal_list_item
+        }
+        val adapterLayout:View = LayoutInflater.from(parent.context).inflate(chosenLayout, parent, false)
 
-        // TODO Inflate the layout
-
-        // TODO: Null should not be passed into the view holder. This should be updated to reflect
-        //  the inflated layout.
-        return DogCardViewHolder(null)
+        return DogCardViewHolder(adapterLayout)
     }
 
     override fun getItemCount(): Int = 0 // TODO: return the size of the data set instead of 0
