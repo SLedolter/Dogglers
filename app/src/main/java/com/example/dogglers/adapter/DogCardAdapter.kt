@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.res.TypedArrayUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dogglers.R
 import com.example.dogglers.const.Layout
@@ -50,27 +51,28 @@ class DogCardAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DogCardViewHolder {
-        val chosenLayout:Int = if(layout == Layout.GRID){
-            R.layout.grid_list_item
-        } else {
-            R.layout.vertical_horizontal_list_item
+        val chosenLayout:Int
+        when(layout){
+            Layout.VERTICAL -> chosenLayout = R.layout.vertical_horizontal_list_item
+            Layout.HORIZONTAL ->  chosenLayout = R.layout.vertical_horizontal_list_item
+            Layout.GRID ->  chosenLayout = R.layout.grid_list_item
+            else ->  chosenLayout = R.layout.vertical_horizontal_list_item
         }
+
         val adapterLayout:View = LayoutInflater.from(parent.context).inflate(chosenLayout, parent, false)
 
         return DogCardViewHolder(adapterLayout)
     }
 
-    override fun getItemCount(): Int = 0 // TODO: return the size of the data set instead of 0
+    override fun getItemCount() = dataset.size
 
     override fun onBindViewHolder(holder: DogCardViewHolder, position: Int) {
-        // TODO: Get the data at the current position
-        // TODO: Set the image resource for the current dog
-        // TODO: Set the text for the current dog's name
-        // TODO: Set the text for the current dog's age
+        val item = dataset[position]
+        holder.imgProfile.setImageResource(item.imageResourceId)
+        holder.txtName.text = item.name
+
         val resources = context?.resources
-        // TODO: Set the text for the current dog's hobbies by passing the hobbies to the
-        //  R.string.dog_hobbies string constant.
-        //  Passing an argument to the string resource looks like:
-        //  resources?.getString(R.string.dog_hobbies, dog.hobbies)
+        holder.txtAge.text = resources?.getString(R.string.dog_age, item.age)
+        holder.txtAge.text = resources?.getString(R.string.dog_hobbies, item.hobbies)
     }
 }
